@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8">
+    <title>CSS Perspector</title>
+    <style>
+        @media screen and (max-width: 1366px) { 
+            html { 
+                font-size: 12px;
+            } 
+        }
+        @media screen and (min-width: 1367px) { 
+            html { 
+                font-size: 16px;
+            } 
+        }
+
+
+        * {
+            margin: 0; padding: 0; 
+            box-sizing: border-box;
+            font-family: 'menlo','tahoma','microsoft yahei'; font-size: 10px; 
+        }
+        html,body {
+            width: 100%;
+            height: 100%;
+        }
+        section { 
+            position: relative; 
+        }
+        input[type="range"] {   
+            margin-top: 2px;
+            background-color: #272728;
+            border-radius: 15px;
+            outline: none; 
+            width: 180px;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            box-shadow: 0 1px 0 0px #424242,
+                0 1px 0 #060607 inset,
+                0px 2px 10px 0px black inset,
+                1px 0px 2px rgba(0, 0, 0, 0.4) inset,
+                0 0px 1px rgba(0, 0, 0, 0.6) inset;
+        }
+        input[type="range"]:hover {
+            background-color: #333;            
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            cursor: default;
+            top: 1px;
+            height: 12px;
+            width: 12px;
+            background: none repeat scroll 0 0 #09e8bb;
+            border-radius: 12px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            -webkit-transition: ease 0.4s;
+        } 
+        input[type="range"]::-webkit-slider-thumb:hover {
+            width: 16px;
+            background: none repeat scroll 0 0 #7effc1;            
+        }
+        input[type="range"]::-moz-range-thumb {
+            cursor: default;
+            top: 1px;
+            height: 12px;
+            width: 12px;
+            border: none;
+            outline: none;
+            background: none repeat scroll 0 0 #09e8bb;
+            border-radius: 12px;
+            cursor: pointer;
+            appearance: none;
+            -moz-appearance: none;
+            -moz-transition: ease 0.4s;
+        }
+        input[type="range"]::-moz-range-track {  
+            appearance: none;
+            -moz-appearance: none; 
+            background: none;
+        }  
+        .transition {
+            transition: ease 0.4s;
+            -moz-transition: ease 0.4s;
+            -webkit-transition: ease 0.4s;
+        }
+
+        /*dashboard*/
+        #dashboard{ 
+            position: fixed; 
+            vertical-align: top; 
+            width: 200px; height: 100%; 
+            background-color: #333;
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #111), color-stop(1, #666)); 
+            background: -moz-linear-gradient(top,#111,#666); 
+            z-index: 999; 
+        }
+        #dashboard_logo { 
+            position: relative; 
+            margin: 2rem auto 0;
+            width: 12rem; height: 6rem; 
+            background-image: url(images/tools/CSS3Deepin/logo.png); 
+            background-size: cover;
+        }
+        #dashboard_author_sign {
+            position: fixed;
+            bottom: 10px; 
+            width: 200px; height: 30px;
+            font-size: 10px; color: #000; text-align: center; font-family: 'Helvetica Neue','Tahoma'; font-style: italic;
+        }
+        #dashboard_author_sign a {
+            font-size: 12px; color: #000; line-height: 1.5; text-decoration: none; letter-spacing: 4px;
+        }
+        #dashboard_author_sign a:hover {
+            text-decoration: underline;
+        }
+
+        /* sliders */
+        #slider-container { 
+            margin-top: 10px; 
+            margin-left: 10px; 
+            font-size: 12px; color: #fff; 
+        }
+        .slider-group-title { 
+            margin-top: 20px; 
+            margin-bottom: 10px; 
+            color: #999; font-size: 14px; font-style: italic;
+        }
+        .slider { 
+            margin-bottom: 10px; 
+        }
+        .slider-title {
+            display: inline-block;
+            font-size: 10px;
+            cursor: default;
+        }
+        
+        /* right part */
+        .wrapper-right {  
+            height: 100%;
+        }
+        /* canvas */
+        #canvas_panel{ 
+            position: fixed; 
+            left: 200px; bottom: 0px; 
+            /*width: calc( 100% - 200px ); */
+            height: 200px; 
+            background: url(images/tools/CSS3Deepin/CSS3Deepin_02_v3.png) center no-repeat rgba(0,0,0,0.7); 
+            z-index: 999; 
+        }
+        #canvas_panel.canvas-hidden {
+            width: 40px; 
+        }
+        #canvas_panel_fold {
+            position: absolute;
+            right: 0;
+            width: 40px; height: 200px;
+            background: #000;
+            cursor: pointer;
+        }
+        #canvas_panel_fold:hover>#button_fold {
+            opacity: 1;
+        }
+        #button_fold {
+            position: relative;
+            margin: 86px auto; 
+            width: 24px; height: 24px;
+            background: url(images/tools/CSS3Deepin/btns.png) -72px 0;
+            background-size: cover;
+            opacity: 0.8;
+        }
+
+        /* stage */
+        #stage_container {  
+            left: 200px; 
+            width: calc( 100% - 200px ); height: calc( 100% - 00px );
+            background: url(images/tools/CSS3Deepin/bg02.jpg); 
+            background-position: center; 
+            background-size: cover;  
+            overflow: hidden;
+            font-size: 14px; 
+
+            -webkit-perspective: 800px; 
+            perspective: 800px; 
+            -webkit-perspective-origin: 50% 50%;
+            perspective-origin: 50% 50%;
+        }
+        .wall {
+            position: absolute;
+            left: calc( 50% - 400px ); top: calc( 50% - 240px ); 
+            width: 800px; height: 480px; 
+            border: 1px solid #fff;
+            background: url(images/tools/CSS3Deepin/tile_wall.png);
+            font-size: 0; color: #333; 
+            z-index: 0;   
+        }
+        #wall_back {
+            transform: translateZ( 0px ) rotateY(0deg);
+            opacity: 0.3;    
+        }
+        #wall_left {
+            transform: translate3d( -400px, 0px, 400px ) rotateY(90deg);
+            opacity: 0.5;
+        }
+        #wall_right {
+            transform: translate3d( 400px, 0, 400px ) rotateY(270deg);
+            opacity: 0.5;
+            text-align: right;
+        }
+        #wall_top {
+            height: 800px;             
+            transform: translate3d( 0, -400px, 400px ) rotateX(90deg);
+            opacity: 0.4;
+        }
+        #wall_bottom {
+            height: 800px; 
+            transform: translate3d( 0, 80px, 400px ) rotateX(90deg);
+            opacity: 0.7;
+        }
+        #frame { 
+            position: absolute; 
+            left: calc( 50% - 135px ); top: calc( 50% - 165px ); 
+            width: 270px; height: 330px; 
+            background: url(images/tools/CSS3Deepin/frame.png);
+            background-size: cover;
+            -moz-transform: rotateY(0deg) translate3d( 0px, 0px, 100px); 
+            -webkit-transform: rotateY(0deg) translate3d( 0px, 0px, 100px); 
+            z-index: 100;
+        }
+        #painting { 
+            position: absolute; 
+            left: calc( 50% - 105px ); top: calc( 50% - 135px ); 
+            width: 210px; height: 270px; 
+            background: url(images/tools/CSS3Deepin/pic.jpg); 
+            background-size: cover;
+            font-size: 40px; color: #fff; text-align: center; line-height: 200px; 
+            -moz-transform: rotateY(0deg) translate3d( 0px, 0px, 0px); 
+            -webkit-transform: rotateY(0deg) translate3d( 0px, 0px, 0px); 
+            z-index: 9;
+        }
+        #frameShadow {
+            position: relative;
+            margin: 100px auto;
+            width: 220px; height: 5px;
+            background: #000;
+            filter: blur(3px);
+            -webkit-filter: blur(3px);
+        }
+    </style>
+    <!-- menu / author info -->
+    <style>
+        .menu-wrapper { 
+            position: absolute; 
+            top: 10px; right: 10px;
+            z-index: 999;
+        }
+        .menu-button {
+            display: inline-block; vertical-align: top;
+            margin-right: 7px;
+            width: 24px; height: 24px;
+            background: url(images/tools/CSS3Deepin/btns.png); 
+            background-size: cover;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .menu-button:hover {
+            opacity: 1;
+        }
+        .menu-button a {
+            display: block;
+            width: 100%; height: 100%;
+        }
+        #button_home {
+            background-position:  0px 0px;
+        }
+        #button_intro {
+            background-position:  -48px 0px;            
+        }
+        #button_about {
+            background-position:  -24px 0px;
+        }
+
+        /*author */
+        #authorInfo { 
+            display: none;
+            position: absolute; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.5); 
+            z-index: 1999; 
+            -webkit-perspective: 800px;
+        }
+        #authorDialog { 
+            position: relative; 
+            margin: -200px auto;
+            top: 50%; 
+            padding: 20px; 
+            width: 600px; height: 400px; 
+            background: #fff; border-radius: 5px; 
+            font-size: 12px; font-family: 'Helvetica Neue','Tahoma'; line-height: 1.2; 
+            opacity: 0;
+            -webkit-transform: rotateX(30deg) rotateY(10deg) translateX(-30px);
+        }
+        #authorInfo .buttonClose { 
+            position: absolute; 
+            right: 20px; 
+            width: 24px; height: 24px; 
+            background: url(images/tools/motionanalytic/btns.png) -24px -250px; cursor: pointer;
+        }
+        #authorInfo h1 { 
+            margin-top: 20px; 
+            margin-bottom: 10px; 
+            font-size: 18px; font-family: inherit;
+        }
+        #authorInfo h3 { 
+            font-size: 12px; color: #999; font-family: inherit; font-style: italic; font-weight: normal; 
+        }
+        #authorInfo p { 
+            margin: 10px 0; 
+            font-size: 14px; color: #222; font-family: inherit; font-weight: 400; line-height: 1.5;
+        }
+    </style>
+    <!-- baidu test -->
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "//hm.baidu.com/hm.js?d84d162ea3122a700428736747a85ce0";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+</head>
+
+<body>
+
+    <div class="menu-wrapper">
+        <div class="menu-button" id="button_home"><a href="http://www.fangyexu.com" target="blank"></a></div>
+        <!-- <div class="menu-button" id="button_intro" onclick="backToHome()"></div> -->
+        <div class="menu-button" id="button_about" onclick="showAuthorInfo()"></div>
+    </div>
+
+    <div id="authorInfo">
+        <div id="authorDialog">
+            <div class="buttonClose" onclick="hideAuthorInfo()"></div>
+            <h1>CSS3 Perspector</h1>
+            <h3>Design & Developed by Xu Fangye</h3>
+            <p>-</p>
+            <p>你好，这是我做的一个用来调节CSS3透视属性的工具，你可以调节：
+                <br>· 容器的Perspective属性，包括距离(perspective)、视点(perspective-origin)
+                <br>· 元素的Transform属性，包括位移(translate)、旋转(rotate)和斜切(skew)属性</p>
+            <p>-</p>
+            <p>This is a home-made design tool, used for designing 3D position with CSS3 perspective mod. You can modify the perspective parameters to check the effect, and then apply them in your webpage design. </p>
+            <p>-</p>
+            <p>希望你能喜欢这个工具 / Hope you like it :)</p>
+        </div>
+        <!-- author info -->
+        <script type="text/javascript">
+            function showAuthorInfo() {
+                $('#authorInfo').show();
+                var t = window.setTimeout( showAuthorDialog, 20 );
+            }
+            function hideAuthorInfo() {
+                $('#authorInfo').hide();
+            }
+            function showAuthorDialog() {
+                $('#authorDialog').css({
+                    opacity: 1,
+                    webkitTransform: 'rotateX(0)'
+                })
+                $('#authorDialog').addClass('transition');
+            }
+        </script>
+    </div>
+
+    <section id="dashboard">
+        <div id="dashboard_logo"></div>
+        <div id="slider-container">
+            <div class="slider-group-title">Set Perspective</div>
+            <div class="slider">
+                <div class="slider-title">Perspective: </div>
+                <span class="numText" id="display_perspectiveNum"> 800</span>
+                <input class="transition" type="range" id="perspectiveNum" min="1" max="2000" step="10" value="800" onmousedown="changeTransform(event)">
+            </div>
+            <div class="slider">
+                <div class="slider-title">Perspective-origin-x: </div>
+                <span class="numText" id="display_perspectiveOriginXNum"> 50%</span>
+                <input class="transition" type="range" id="perspectiveOriginXNum" min="0" max="100" step="1" value="50" onmousedown="changeTransform(event)">
+            </div>
+            <div class="slider">
+                <div class="slider-title">Perspective-origin-y: </div>
+                <span class="numText" id="display_perspectiveOriginYNum"> 50%</span>
+                <input class="transition" type="range" id="perspectiveOriginYNum" min="0" max="100" step="1" value="50" onmousedown="changeTransform(event)">
+            </div>
+
+            <div class="slider-group-title">Set Transform</div>
+            <div class="slider">
+                <div class="slider-title">translate X: </div>
+                <span class="numText" id="display_translate_X"> 0</span>
+                <input class="transition" type="range" id="translate_X" min="-1000" max="1000" step="10" value="0" onmousedown="changeTransform(event)">
+            </div>
+            <div class="slider">
+                <div class="slider-title">translate Y: </div>
+                <span class="numText" id="display_translate_Y"> 0</span>
+                <input class="transition" type="range" id="translate_Y" min="-300" max="300" step="5" value="0" onmousedown="changeTransform(event)">
+            </div>
+            <div class="slider">
+                <div class="slider-title">translate Z: </div>
+                <span class="numText" id="display_translate_Z"> -800</span>
+                <input class="transition" type="range" id="translate_Z" min="-1000" max="1000" step="10" value="-800" onmousedown="changeTransform(event)">
+            </div>
+
+            <div class="slider">
+                <div class="slider-title">rotate X: </div>
+                <span class="numText" id="display_rotate_X"> 0°</span>
+                <input class="transition" type="range" id="rotate_X" min="0" max="360" step="1" value="0" onmousedown="changeTransform(event)"/>
+            </div>
+            <div class="slider">
+                <div class="slider-title">rotate Y: </div>
+                <span class="numText" id="display_rotate_Y"> 0°</span>
+                <input class="transition" type="range" id="rotate_Y" min="0" max="360" step="1" value="0" onmousedown="changeTransform(event)"/>
+            </div>
+            <div class="slider">
+                <div class="slider-title">rotate Z: </div>
+                <span class="numText" id="display_rotate_Z"> 0°</span>
+                <input class="transition" type="range" id="rotate_Z" min="0" max="360" step="1" value="0" onmousedown="changeTransform(event)"/>
+            </div>
+            <div class="slider">
+                <div class="slider-title">skew X: </div>
+                <span class="numText" id="display_skew_X"> 0</span>
+                <input class="transition" type="range" id="skew_X" min="0" max="360" step="1" value="0" onmousedown="changeTransform(event)"/>
+            </div>
+            <div class="slider">
+                <div class="slider-title">skew Y: </div>
+                <span class="numText" id="display_skew_Y"> 0</span>
+                <input class="transition" type="range" id="skew_Y" min="0" max="360" step="1" value="0" onmousedown="changeTransform(event)"/>
+            </div>
+        </div>
+        <div id="dashboard_author_sign">Designed & developed by<br> <a href="http://www.fangyexu.com" target="blank">XU FANGYE</a></div>
+    </section>
+
+    <div class="wrapper-right">
+        <section id="stage_container">
+            <div class="wall" id="wall_back">back wall</div>
+            <div class="wall" id="wall_left">Left wall</div>
+            <div class="wall" id="wall_right">Right wall</div>
+            <div class="wall" id="wall_top">Top wall</div>
+            <div class="wall" id="wall_bottom">Bottom wall <div id="frameShadow"></div> </div>
+            <div id="frame"></div>
+            <div id="painting"></div>
+        </section>
+        <section id="canvas_panel">
+            <div id="canvas_panel_fold"><div id="button_fold"></div></div>
+        </section>
+        <script type="text/javascript">
+            var bDrawingCanvas = true;
+            $('#canvas_panel_fold').click(function(){
+                $('#canvas_panel').toggleClass('canvas-hidden');
+                toggleDrawingCanvas();
+            });
+            function toggleDrawingCanvas() {
+                if( bDrawingCanvas ){
+                    bDrawingCanvas = false;
+                    button_fold.style.backgroundPosition = '-96px 0';
+                }else{
+                    bDrawingCanvas = true;
+                    button_fold.style.backgroundPosition = '-72px 0';
+                }
+            }
+        </script>
+    </div>
+
+    <!-- slider-group the params -->
+    <script>
+          
+        var perspNum= 800;
+        var perspectiveOriginXNum = 50;
+        var perspectiveOriginYNum = 50;
+        var rX=0,rY=0,rZ=0;
+        var tX=0,tY=0,tZ=-800;
+        var skX=0,skY=0;
+        var transformText;
+
+        function changeTransform(e) {
+            var e = e ? e : window.event;
+            var target = e.target;
+            document.onmousemove=function(e){
+                switch( target.id ) {
+                    case 'translate_X':
+                        tX = target.value;
+                        break;
+                    case 'translate_Y':
+                        tY = target.value;
+                        break;
+                    case 'translate_Z':
+                        tZ = target.value;
+                        break;
+                    case 'rotate_X':
+                        rX = target.value;
+                        break;
+                    case 'rotate_Y':
+                        rY = target.value;
+                        break;
+                    case 'rotate_Z':
+                        rZ = target.value;
+                        break;
+                    case 'skew_X':
+                        skX = target.value;
+                        break;
+                    case 'skew_Y':
+                        skY = target.value;
+                        break;
+                    case 'perspectiveNum':
+                        perspNum = target.value;
+                        break;
+                    case 'perspectiveOriginXNum':
+                        perspectiveOriginXNum = target.value;
+                        break;
+                    case 'perspectiveOriginYNum':
+                        perspectiveOriginYNum = target.value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        // panel
+        var panel = document.getElementById('canvas_panel');
+        var panel_canvas = document.createElement('canvas');    
+        panel.appendChild( this.panel_canvas );
+        var canvasW = $(window).width() - 200;
+        var canvasH = 200;
+        panel_canvas.width = canvasW;
+        panel_canvas.height = canvasH;
+        var ctx = this.panel_canvas.getContext('2d');
+        var eye= new Image(); eye.src="images/tools/CSS3Deepin/canvas_eye.png";
+        var canvas_painting= new Image(); canvas_painting.src="images/tools/CSS3Deepin/canvas_painting.png";
+        var canvas_frame_left= new Image(); canvas_frame_left.src="images/tools/CSS3Deepin/canvas_frame_left.png";
+        var canvas_frame_right= new Image(); canvas_frame_right.src="images/tools/CSS3Deepin/canvas_frame_right.png";
+
+        var circle_perspX= -perspNum*0.25;
+        var circle_perspY= 0-60;
+        var circle_perspRadius= 20;
+        var gap_persp_mouse;
+        var isDragging_circle_persp= false;
+
+        var circle_tranzX= -tZ*0.25;
+        var circle_tranzY= 0-60;
+        var circle_tranzRadius= 20;
+        var gap_tranz_mouse;
+        var isDragging_circle_tranz= false;
+
+        function update() {
+            if( isDragging_circle_persp ) {
+                circle_perspX = mouseX - gap_persp_mouse;
+                perspNum = -(mouseX - gap_persp_mouse)*4;
+            }
+            if( isDragging_circle_tranz ) {
+                circle_tranzX = mouseX - gap_tranz_mouse;
+                tZ = -(mouseX - gap_tranz_mouse)*4;
+            }
+
+            // stage perspective
+            stage_container.style.webkitPerspective = perspNum.toString() + 'px';
+            stage_container.style.webkitPerspectiveOriginX = perspectiveOriginXNum + '%';
+            stage_container.style.webkitPerspectiveOriginY = perspectiveOriginYNum + '%';
+            stage_container.style.perspective = perspNum.toString() + 'px';
+            stage_container.style.perspectiveOrigin = perspectiveOriginXNum + '%' + perspectiveOriginYNum + '%';
+            circle_perspX= -perspNum*0.25;
+
+            // painting transform
+            transformText = 'translate3d('+tX+'px,'+tY+'px,'+tZ+'px)'+'rotateX('+rX+'deg) rotateY('+rY+'deg) rotateZ('+rZ+'deg) skew('+skX+'deg,'+skY+'deg)' ;
+            painting.style.webkitTransform = transformText;
+            painting.style.transform = transformText
+            circle_tranzX= -tZ*0.25;
+        }
+        function updateHtml() {
+            document.getElementById('display_translate_X').innerHTML= ' ' + tX;
+            document.getElementById('display_translate_Y').innerHTML= ' ' + tY;
+            document.getElementById('display_translate_Z').innerHTML= ' ' + tZ;
+
+            document.getElementById('display_rotate_X').innerHTML= ' ' + rX +'°';
+            document.getElementById('display_rotate_Y').innerHTML= ' ' + rY +'°';
+            document.getElementById('display_rotate_Z').innerHTML= ' ' + rZ +'°';
+
+            document.getElementById('display_skew_X').innerHTML= ' ' + skX +'°';
+            document.getElementById('display_skew_Y').innerHTML= ' ' + skY +'°';
+
+            document.getElementById('display_perspectiveNum').innerHTML= ' ' + perspNum;
+            document.getElementById('display_perspectiveOriginXNum').innerHTML= perspectiveOriginXNum+ '%';
+            document.getElementById('display_perspectiveOriginYNum').innerHTML= perspectiveOriginYNum+ '%';
+        }
+        function updateZIndex() {
+            painting.style.zIndex = tZ;
+            // frame.style.zIndex = 100;
+        }
+
+        function draw() {
+            // context save
+            ctx.save();
+            // clear 
+            ctx.translate(panel_canvas.width/2,100);
+
+            // eye
+            ctx.drawImage(eye, circle_perspX-30,0-20);
+
+            // painting projection on screen
+            ctx.save();
+            ctx.beginPath();
+            var xdist = 6*(1+tZ/2000);
+            var ydist_right = 28*(-circle_perspX+9)/(-circle_perspX+circle_tranzX+30);
+            var ydist_left = 28*(-circle_perspX-9)/(-circle_perspX+circle_tranzX+30);
+            ctx.moveTo( xdist, ydist_right );
+            ctx.lineTo( xdist, -ydist_right );
+            ctx.lineTo( -xdist,-ydist_left );
+            ctx.lineTo( -xdist, ydist_left );
+            ctx.globalCompositeOperation = 'darken';
+            ctx.fillStyle="rgba(5,68,42,1)";
+            ctx.fill();
+            ctx.closePath();
+            ctx.restore();
+
+            if( tZ<=100 ) {
+
+                // frame left
+                ctx.drawImage( canvas_frame_left, 0,0, 16,82, -40,-32, 12,64 );
+                // eyesight
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(circle_perspX,0);
+                ctx.lineTo(circle_tranzX+6,-26);
+                ctx.lineTo(circle_tranzX+6,26);
+                ctx.lineTo(circle_perspX,0);
+                ctx.fillStyle="rgba(64,252,180,0.4)";
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+                // painting
+                ctx.drawImage( canvas_painting, 0,0, 30,80, circle_tranzX-15, -32, 24,64 ); 
+                // frame right
+                ctx.drawImage( canvas_frame_right, 0,0, 16,82, -28,-32, 12,64 );
+            }else{
+                // frame left
+                ctx.drawImage( canvas_frame_left, 0,0, 16,82, -40,-32, 12,64 );
+                // eyesight
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(circle_perspX,0);
+                ctx.lineTo(circle_tranzX+6,-26);
+                ctx.lineTo(circle_tranzX+6,26);
+                ctx.lineTo(circle_perspX,0);
+                ctx.fillStyle="rgba(64,252,180,0.4)";
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+                // frame right
+                ctx.drawImage( canvas_frame_right, 0,0, 16,82, -28,-32, 12,64 );  
+                // painting
+                ctx.drawImage( canvas_painting, 0,0, 30,80, circle_tranzX-15, -32, 24,64 );               
+            }
+
+            // context restore 
+            ctx.restore();
+        }
+        function drawInfoPerspective() {
+            // save
+            ctx.save();
+            ctx.translate(panel_canvas.width/2,100);
+
+            // text-name-bg
+            ctx.beginPath();
+            ctx.fillStyle= "#046153";
+            ctx.arc( circle_perspX-100, 0-60, 10, 0, Math.PI*2 );
+            ctx.fillRect( circle_perspX-100, 0-70, 100, 20 );
+            ctx.fill();
+            ctx.closePath();
+            // text-name
+            ctx.fillStyle= "#fff";
+            ctx.font= "normal normal 12px menlo"
+            ctx.textAlign= "left";
+            ctx.fillText( 'Perspective', circle_perspX-100,0-55 );
+            // triangle
+            ctx.beginPath();
+            ctx.moveTo( circle_perspX, 0-30 );
+            ctx.lineTo( circle_perspX-5, 0-45 );
+            ctx.lineTo( circle_perspX+5, 0-45 );
+            ctx.fillStyle= "#046153";
+            ctx.fill();
+            ctx.closePath();
+            // circle
+            ctx.beginPath();
+            ctx.arc( circle_perspX,circle_perspY,20,0,Math.PI*2);
+            ctx.lineWidth= 3.0;
+            ctx.strokeStyle= "#046153";
+            ctx.stroke();
+            ctx.fillStyle= "#fff";
+            ctx.fill();
+            ctx.closePath();
+            // text-param
+            ctx.fillStyle= "#333";
+            ctx.font= "normal normal 12px menlo"
+            ctx.textAlign= "center";
+            ctx.fillText( -circle_perspX*4, circle_perspX, 0-55 );
+
+            // restore
+            ctx.restore();
+        }
+        function drawInfoTranslateZ() {
+            // save
+            ctx.save();
+            ctx.translate(panel_canvas.width/2,100);
+
+            // text-name-bg
+            ctx.beginPath();
+            ctx.fillStyle= "#046153";
+            ctx.arc( circle_tranzX+110, 0-60, 10, 0, Math.PI*2 );
+            ctx.fillRect( circle_tranzX+110, 0-70, -100, 20 );
+            ctx.fill();
+            ctx.closePath();
+            // // text-name
+            ctx.fillStyle= "#fff";
+            ctx.font= "normal normal 12px menlo"
+            ctx.textAlign= "right";
+            ctx.fillText( 'translateZ', circle_tranzX+100,0-55 );
+            // // triangle
+            ctx.beginPath();
+            ctx.moveTo( circle_tranzX, 0-30 );
+            ctx.lineTo( circle_tranzX-5, 0-45 );
+            ctx.lineTo( circle_tranzX+5, 0-45 );
+            ctx.fillStyle= "#046153";
+            ctx.fill();
+            ctx.closePath();
+            // circle
+            ctx.beginPath();
+            ctx.arc( circle_tranzX,circle_tranzY,20,0,Math.PI*2);
+            ctx.lineWidth= 3.0;
+            ctx.strokeStyle= "#046153";
+            ctx.stroke();
+            ctx.fillStyle= "#fff";
+            ctx.fill();
+            ctx.closePath();
+            // text-param
+            ctx.fillStyle= "#333";
+            ctx.font= "normal normal 12px menlo"
+            ctx.textAlign= "center";
+            ctx.fillText( -circle_tranzX*4, circle_tranzX,0-55 );
+
+            // restore
+            ctx.restore();
+        }
+
+
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+        requestAnimationFrame( run );
+
+        function run() {
+            update();
+            updateHtml();
+            updateZIndex();
+            ctx.clearRect( 0, 0, panel_canvas.width, panel_canvas.height );
+            if( bDrawingCanvas ){
+                draw();
+                drawInfoPerspective();
+                drawInfoTranslateZ();
+            }
+            requestAnimationFrame( run );
+        }
+
+        // control deploy
+        var mouseX, mouseY;
+        // mousemove
+        panel_canvas.addEventListener("mousemove",onMouseMove,false);
+        function onMouseMove(e) {
+            // mouseX= e.clientX - ( document.documentElement.clientWidth/2 - 600 ) ;
+            mouseX= e.clientX-200 -panel_canvas.width/2;
+            mouseY= e.clientY-( $(window).height()-200) -100;
+            //  circle - perspective
+            if( Math.sqrt( (mouseX-circle_perspX)*(mouseX-circle_perspX) + (mouseY-circle_perspY)*(mouseY-circle_perspY) ) < circle_perspRadius ||
+                Math.sqrt( (mouseX-circle_tranzX)*(mouseX-circle_tranzX) + (mouseY-circle_tranzY)*(mouseY-circle_tranzY) ) < circle_tranzRadius ) {
+                    document.getElementById('canvas_panel').style.cursor='pointer';
+                }else{
+                    document.getElementById('canvas_panel').style.cursor='default';
+            }
+        }
+        // mousedown
+        panel_canvas.addEventListener('mousedown',onMouseDown,false);
+        function onMouseDown(e) {
+            //  circle - perspective
+            if( Math.sqrt( (mouseX-circle_perspX)*(mouseX-circle_perspX) + (mouseY-circle_perspY)*(mouseY-circle_perspY) ) < circle_perspRadius ) {
+                isDragging_circle_persp= true;
+                gap_persp_mouse= mouseX-circle_perspX;
+            }
+            //  circle - translateZ
+            if( Math.sqrt( (mouseX-circle_tranzX)*(mouseX-circle_tranzX) + (mouseY-circle_tranzY)*(mouseY-circle_tranzY) ) < circle_tranzRadius ) {
+                isDragging_circle_tranz= true;
+                gap_tranz_mouse= mouseX-circle_tranzX;
+            }
+        }
+        // mouseup
+        panel_canvas.addEventListener('mouseup',onMouseUp,false);
+        function onMouseUp(e) {
+            //  circle - perspective
+            isDragging_circle_persp = false;
+            isDragging_circle_tranz = false;
+                document.getElementById('perspectiveNum').value= perspNum;
+                document.getElementById('translate_Z').value= tZ;
+        }
+    </script>
+
+</body>
+
+</html>

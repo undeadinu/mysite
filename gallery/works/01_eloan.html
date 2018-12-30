@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.0/css/swiper.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.0.0/js/swiper.min.js"></script>
+	<style type="text/css">
+		@media screen and (max-width:1440px){
+			html{
+				font-size: 16px;
+			}
+		}
+
+		@media screen and (min-width: 1441px){
+			html{
+				font-size: 20px;
+			}
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		html,body {
+			background-color: #19191C;
+		}
+
+		.s1 {
+			background-color: #f90;
+		}
+		.s2 {
+			background-color: #09f;
+		}
+		.s3 {
+			background-color: #9f0;
+		}
+
+		.content {
+			position: relative;
+		}
+
+		.swiper-container {
+			display: block;
+			position: absolute;
+			margin-top: 6rem;
+			left: calc( 50% - 30rem );
+			width: 60rem;
+			height: 33.75rem;
+			overflow: visible;
+		}
+		.swiper-wrapper{
+		   transition-timing-function: cubic-bezier( 0.07 , 0.61 , 0.58 , 1.04 );
+		}
+		.title-tag {
+			position: absolute;
+			top: 0;
+			left: -4.5rem;
+			width: 12.8rem;
+			height: 4rem;
+		}
+	</style>
+</head>
+<body>
+	<div class="content">
+		<div class="swiper-container">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide s1"><img src="images/01_01.png" width="100%"><div class="title-tag"><img src="images/01_title_01.png" width="100%"></div></div>
+				<div class="swiper-slide s2"><img src="images/01_02.png" width="100%"></div>
+				<div class="swiper-slide s3"><img src="images/01_03.png" width="100%"></div>
+			</div>
+		    <div class="swiper-button-prev"></div><!--左箭头-->
+		    <div class="swiper-button-next"></div><!--右箭头-->
+		</div>
+
+	</div>
+	
+	<script type="text/javascript">
+
+		var mySwiper = new Swiper('.swiper-container', {
+		    navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+		    },
+		    speed: 500,
+		    slidesPerView : 1,
+			spaceBetween : 220,
+			watchSlidesProgress: true,
+			on:{
+			    sliderMove: function(){
+			      console.log( mySwiper.progress );
+			    },
+			  },
+		});
+
+
+		var swiper1 = new Swiper('#swiper1');
+		var swiper2 = new Swiper('#swiper2');
+		var swiper3 = new Swiper('#swiper3');
+
+	</script>
+</body>	
+</html>

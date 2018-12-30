@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8"/>
+    <meta name="description" content="Fangye XU - 我是一名界面设计师 - 关注数字时代的设计 - 关注交互设计 视觉设计 以及前端开发 - 做一名将技术与艺术结合在一起的设计师">
+    <meta name="keywords" content="用户体验设计,UED设计,设计思维,交互设计,前端开发,HTML5,CSS3,动效设计,原创译文">
+    <title>Fangye Xu</title>
+	<style type="text/css">
+        * {
+            margin: 0px; padding: 0px; 
+            box-sizing: border-box;            
+        }
+        body,html { 
+            height: 100%; 
+            font-family: 'Helvetica Neue', 'microsoft yahei';
+        }
+
+        @font-face {
+            font-family: "Roboto-Thin";
+            src: url("fonts/Roboto-Thin.woff2") format("woff2"),
+                url("fonts/Roboto-Thin.woff") format("woff"),
+                url("fonts/Roboto-Thin.ttf") format("truetype"),
+                url("fonts/Roboto-Thin.eot") format("embedded-opentype"),
+                url("fonts/Roboto-Thin.svg") format("svg");
+        }
+
+
+        @font-face {
+          font-family: 'icomoon';
+          src:  url('fonts/icomoon.eot?jjnhya');
+          src:  url('fonts/icomoon.eot?jjnhya#iefix') format('embedded-opentype'),
+            url('fonts/icomoon.ttf?jjnhya') format('truetype'),
+            url('fonts/icomoon.woff?jjnhya') format('woff'),
+            url('fonts/icomoon.svg?jjnhya#icomoon') format('svg');
+          font-weight: normal;
+          font-style: normal;
+        }
+
+        [class^="icon-"], [class*=" icon-"] {
+          /* use !important to prevent issues with browser extensions that change fonts */
+          font-family: 'icomoon' !important;
+          speak: none;
+          font-style: normal;
+          font-weight: normal;
+          font-variant: normal;
+          text-transform: none;
+          line-height: 1;
+
+          /* Better Font Rendering =========== */
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-dribbble:before {
+          content: "\eaa7";
+        }
+        .icon-behance:before {
+          content: "\eaa8";
+        }
+        .icon-linkedin:before {
+          content: "\eac9";
+        }
+        .icon-github:before {
+            content: "\eab0";
+        }
+
+        /* header */
+        .header {
+            padding-top: 30px;
+        }
+        .header .logo-wrapper {
+            display: inline-block;
+            vertical-align: top;
+            width: 10%;
+        }
+        .header .logo-wrapper .logo {
+            margin-top: 13px;
+            width: 40px; 
+            height: 40px;
+            background-image: url(images/favicon.png);
+            background-size: cover;
+        }
+        .header .menu-wrapper {
+            display: inline-block;
+            vertical-align: top;
+            width: 80%;
+            text-align: right;
+        }
+        .header .menu-item {
+            display: inline-block;
+            vertical-align: top;
+            width: 100px;
+            height: 66px;
+        }
+        .header .menu-item .lan-btn {
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 16px;
+            width: 40px;
+            height: 32px;
+            background-color: rgba(255,255,255,0.05);
+            opacity: 0.3;
+            cursor: pointer;
+        }
+        .header .menu-item .lan-btn.on {
+            background-color: #2c273a;
+            opacity: 1.0;
+        }
+        .header .menu-item .lan-btn.zh {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            background-image: url(images/ui/switch_lan_zh.png);
+        }
+        .header .menu-item .lan-btn.en {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            background-image: url(images/ui/switch_lan_en.png);
+        }
+
+
+
+        #scene {
+            position: fixed;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            font-size: 0;
+        }
+
+        .wrapper {
+            position: absolute;
+            padding-bottom: 50px;
+            top: 0; left: 50%;
+            margin-left: -480px;
+            width: 960px;
+        }
+        #content {
+            position: relative;
+            width: 61.8%;
+            padding-top: 120px;
+            color: #ffffff; 
+            z-index: 99;
+        }
+        #content h1 {
+            color: inherit; 
+            font-size: 60px;
+            font-family: 'Roboto-Thin', sans-serif; 
+            font-weight: 100;
+            line-height: 1.5;
+        }
+        #content h2 {
+            margin: 66px 0 18px;
+            color: inherit; 
+            font-size: 21px; 
+            font-family: 'Roboto-Thin', sans-serif; 
+            font-weight: 100;
+            letter-spacing: 1px; 
+            line-height: 1.5;
+        }
+        #content p {
+            display: inline-block;
+            margin: 4px 0;
+            color: #95fffd; 
+            font-size: 18px;
+            font-family: 'Roboto-Thin', sans-serif;
+            font-weight: 200;
+            /*font-style: italic; */
+            letter-spacing: 1px; 
+            line-height: 1.8; 
+            opacity: 0.85;
+        }
+        #content #personal_info a {
+            padding-bottom: 2px;
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid #95fffd;
+            transition: 300ms ease;
+        }
+        #content #personal_info a:hover {
+            color: #fff;
+        }
+        #content .social {
+            margin-top: 20px;
+        }
+        #content .social a {
+            display: inline-block;
+            margin-right: 10px;
+            height: 24px;
+            color: #95fffd; 
+            font-size: 24px; 
+            font-weight: 500;
+            line-height: 1.2; 
+            text-decoration: none;
+            opacity: 0.9;
+            transition: 300ms ease;
+        }
+        #content .social a:hover {
+            color: #fff;
+            opacity: 1.0;
+        }
+
+
+        .tools {
+            font-size: 0;
+        }
+        .tools a {
+            display: inline-block;
+            position: relative;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            width: 100px; height: 100px;
+            font-size: 14px;
+            outline: rgba(255,255,255,0) solid 1px;
+            cursor: pointer;       
+            transition: 200ms ease;     
+        }
+        .tools a:hover {
+            outline: rgba(255,255,255,1) solid 1px;
+            /*outline: #fff solid 1px;*/
+        }
+
+        .gallery {
+            position: relative;
+            width: 400px;
+            font-size: 0;
+        }
+        .gallery a {
+            display: inline-block;
+            position: relative;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            width: 100px; height: 100px;
+            font-size: 14px; 
+            cursor: pointer;
+            background-image: none;
+        }
+
+        #content .works a {
+            display: block;
+            position: relative;
+            margin-top: 12px;
+            padding: 12px;
+            width: 480px;
+            background-color: rgba( 0, 0, 0, 0.8 );
+            color: #c9e0e0;
+            outline: rgba(255,255,255,0) solid 1px;
+            cursor: pointer;       
+            transition: 200ms ease;     
+        }
+        #content .works a:hover {
+            outline: rgba(255,255,255,1) solid 1px;
+        }
+
+        #content .works a .img-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            width: 116px;
+            height: 90px;
+        }
+        #content .works a .text-wrapper {
+            display: inline-block;
+            vertical-align: middle;
+            position: relative;
+            margin-left: 20px;
+            width: 300px;
+        }
+        #content .works a .title {
+            font-size: 15px;
+            font-weight: 200;
+            letter-spacing: 1px;
+        }
+        #content .works a .title .behance {
+            padding-bottom: 2px;
+            border-bottom: 1px solid #3661ff;
+        }
+        #content .works a .title .dribbble {
+            padding-bottom: 2px;
+            border-bottom: 1px solid #FF35AB;
+        }
+        #content .works a .subtitle {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: 200;
+            font-style: italic;
+            letter-spacing: 1px;
+            opacity: 0.5;
+        }
+
+        #content .links a {
+            margin: 6px;
+            padding: 4px 10px; 
+            color: #95fffd; 
+            font-size: 12px;
+            font-weight: 500; 
+            line-height: 1.2; 
+            text-decoration: none;
+        }
+	</style>
+
+    <script>
+        // var _hmt = _hmt || [];
+        // (function() {
+        //   var hm = document.createElement("script");
+        //   hm.src = "//hm.baidu.com/hm.js?d84d162ea3122a700428736747a85ce0";
+        //   var s = document.getElementsByTagName("script")[0]; 
+        //   s.parentNode.insertBefore(hm, s);
+        // })();
+    </script>
+    <script src="js/mobile-detect.js"></script>
+    <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script>
+    <script >
+        var md = new MobileDetect(window.navigator.userAgent);
+        // 移动
+        if (md.mobile()) {
+            window.location.href = 'http://www.fangyexu.com/mobile/home.html';
+        }
+    </script>
+</head>
+<body>
+    <div id="scene">
+        <iframe src="gallery/scenery/S08_scifi_dots.html" frameborder="0" scrolling="no" width="100%" height="100%" id="scenery"></iframe>
+    </div>
+
+    <div class="wrapper">
+
+        <div class="header">
+            <div class="logo-wrapper">
+                <div class="logo"></div>
+            </div>
+            <div class="menu-wrapper">
+                <div class="menu-item" id="switch_language">
+                    <div class="lan-btn zh" data-lang="zh"></div>
+                    <div class="lan-btn en" data-lang="en"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+            <h1>Frank Hsu</h1>
+            <p id="personal_info">I'm a UX/UI designer, currently working for China Merchants Bank ( credit card center ) as a full-time designer. I live in Shanghai, China. Besides the job, I like to <a href="https://github.com/winterx" target="blank" class="github">create something interesting</a>. I'm an addict of cat and coffee.</p>
+            <!-- social profile -->
+            <div class="text-wrapper social">
+                <a href="https://dribbble.com/fangyexu" target="blank"><span class="icon-dribbble"></span></a>
+                <a href="https://www.behance.net/fangyexu" target="blank"><span class="icon-behance"></span></a>
+                <!-- <a href="https://github.com/winterx" target="blank"><span class="icon-github"></span></a> -->
+                <a href="http://cn.linkedin.com/in/fangyexu/en" target="blank"><span class="icon-linkedin"></span></a>
+            </div>
+            <!-- design tools -->
+            <h2 id="title_tools">Tools from me</h2>
+            <div class="text-wrapper tools">
+                <a href="https://bg-painter.com" target="blank"><img src="images/tools/tools-03.png"></a>
+                <a href="tool-motionPorter.html" target="blank"><img src="images/tools/tools-01.png"></a>
+                <a href="tool-CSS3-Perspector.html" target="blank"><img src="images/tools/tools-02.png"></a>
+            </div>
+
+            <!-- digital works -->
+            <h2 id="title_works">My design works</h2>
+            <div class="works">
+                <a href="https://www.behance.net/fangyexu" target="blank">
+                    <div class="img-wrapper"><img src="images/work_behance.png"></div>
+                    <div class="text-wrapper">
+                        <div class="title">My major project on <span class="behance">Behance</span></div>
+                        <div class="subtitle">Lately: CMB Mobile Life 7.0 design</div>
+                    </div>
+                </a>
+                <a href="https://www.dribbble.com/fangyexu" target="blank">
+                    <div class="img-wrapper"><img src="images/work_dribbble.png"></div>
+                    <div class="text-wrapper">
+                        <div class="title">Illustrations & ideas on <span class="dribbble">Dribbble</span></div>
+                    </div>
+                </a>
+            </div>
+
+            <!-- design links -->
+            <h2>Links</h2>
+            <div class="text-wrapper links" >
+                <a href="http://fangyexu.com/blogs/wordpress" target="blank">个人博客</a>
+                <!-- <a href="blogs/design_websites.html" target="blank">Websites</a> -->
+                <!-- <a href="blogs/designer_links.html" target="blank">links</a> -->
+                <a href="http://www.miitbeian.gov.cn/" target="blank">沪ICP备14046219号</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        // 设定语言显示
+        // ------------------------------------------------------------
+        var words = {
+            '#content h1' : {
+                en: 'Frank Hsu',
+                zh: '徐方烨'
+            },
+            "#content #personal_info": {
+                en: "I'm a UX/UI designer, currently working for China Merchants Bank ( credit card center ) as a full-time designer. I live in Shanghai, China. Besides the job, I like to <a href='https://github.com/winterx' target='blank' class='github'>create something interesting</a>. I'm an addict of cat and coffee.",
+                zh: "我是一名用户体验设计师，工作在招商银行信用卡中心（上海）。在工作之余，我喜欢用代码结合设计，<a href='https://github.com/winterx' target='blank' class='github'>创造有趣的东西</a>。同时，我还是一名猫奴和咖啡爱好者。"
+            },
+            "#title_tools": {
+                en: "Tools from me",
+                zh: "我制作的设计工具"
+            },
+            "#title_works": {
+                en: "My design works",
+                zh: "作品展示"
+            }
+        }
+
+        if( localStorage.hasOwnProperty('lang') ) {
+
+        }else{
+            var language=null;
+            if (navigator.appName == 'Netscape'){
+                language = navigator.language;
+            }
+            else{
+                language = navigator.browserLanguage;
+            }
+            if (language.indexOf('en') > -1){
+                localStorage.lang = "en"
+            } 
+            else if (language.indexOf('zh') > -1){
+                localStorage.lang = "zh"
+            } 
+            else{
+                localStorage.lang = "en"
+            }
+        }
+
+        function switchLanguage( lang ) {
+            localStorage.lang = lang;
+
+            switch( lang ) {
+                case 'en':
+                    $('.lan-btn.en').addClass('on');
+                    $('.lan-btn.en').siblings().removeClass('on');
+                    break;
+                case 'zh':
+                    $('.lan-btn.zh').addClass('on');
+                    $('.lan-btn.zh').siblings().removeClass('on');
+                    break;
+            }
+
+            // UI话术 区分中英文
+            for( var key in words ) {
+                $(key).html( words[key][lang] );
+            }
+        }
+
+        $('.lan-btn').click(function(e){
+            if( this.dataset.lang === 'zh' ) {
+                switchLanguage('zh');
+            }else{
+                switchLanguage('en');
+            }
+        })
+
+        switchLanguage( localStorage.lang );
+
+    </script>
+</body>
+</html>

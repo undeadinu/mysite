@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />
+	<meta charset="utf-8"/>
+	<meta name="description" content="Fangye XU - 一名魔都界面设计师的作品展示 - 关注数字时代的设计 - 关注交互设计 视觉设计 以及前端开发 - 做一名将技术与艺术结合在一起的设计师">
+	<meta name="keywords" content="CSS3 Cubic-bezier 动效 运动曲线">
+	<title>MotionPorter</title>
+	<style type="text/css">
+	* { margin: 0px; padding: 0px; }
+	body { font-family: 'tahoma','微软雅黑'; margin: 0px; padding: 0px; background: url(images/tools/motionanalytic/tile.png); font-size: 0px; }
+	#container { display: inline-block; position: relative; width: 1000px; }
+	#canvasPanel { cursor: default; background: rgba(0,0,0,0.00); }
+	#canvasPanel .info { position: absolute; padding: 0px 5px; background: #ccc; font-size: 12px; color: #aaa;  }
+	#controlInfo { top: 80px; left: 40px; }
+	#canvasInfo { left: 480px; top: 80px;}
+	.buttons { margin-top: 10px; font-size: 0px; }
+	.btn_motiontype { display: inline-block; margin: 5px; width: 80px; height: 60px; background: url(images/tools/motionanalytic/btns.png); border-radius: 3px; border:1px solid #666;}
+	.active { background-color: #000; border:1px solid #f51554; }
+	#linear { }
+	#linear:hover { cursor: pointer; }
+	#circular { background-position: -80px 0; }
+	#circular:hover { cursor: pointer; }
+	.buttons .desc { position: absolute; margin-top: 60px; text-align: center; width: 80px; font-size: 12px; color: #fff; }
+
+	.buttonPlay { position: absolute; margin-top: 80px; margin-left: 65px; width: 70px; height: 70px; color: #fff; font-size: 18px; text-align: center; cursor: pointer; background: url(images/tools/motionanalytic/btns.png); }
+	#on { background-position: 0px -180px; }
+	#on:hover { background-position: 70px -180px; }
+	#cover { background-position: -70px -180px; z-index: 999; }
+	#dashboard { display: inline-block; vertical-align: top; width: 200px; height: 800px; background-color: #333; border-right: 2px solid #333;
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #111), color-stop(1, #345)); }
+	#dashboard .logo { position: relative; width: 200px; height: 150px; background-image: url(images/tools/motionanalytic/logo.png);}
+	#dashboard .menuBox { display: block; position: relative; margin: 0 auto; width: 72px; height: 30px; }
+	#homeButton { float: left; width: 24px; height: 30px; background: url(images/tools/motionanalytic/btns.png) -48px -250px; cursor: pointer; }
+	#authorInfoButton { float: right; width: 24px; height: 30px; background: url(images/tools/motionanalytic/btns.png) -72px -250px; cursor: pointer; }
+
+	#dashboard .info { width:180px; margin-bottom: 10px; color: #999; font-size: 12px; line-height: 18px; border-bottom: 1px dotted #666; text-align: center; }
+	#motiontype { position: relative; left: 10px; top: 40px; }
+	#saveOutputs { position: relative; left: 10px; top: 250px; }
+	#btn_saveOutput { position: relative; left: 40px; width: 100px; height: 30px; background: #06c; border-radius: 5px; cursor: pointer;
+		color: #fff; font-size: 14px; line-height: 30px; text-align: center; text-shadow:0px 2px 4px #666; }
+
+	/*output box*/
+    #output { display: block; position: absolute; top: 520px; left: 240px; width: 922px; height: 122px; background: rgba(10,50,90,0.5) }
+	#output h1 { position: absolute; margin-top: -20px; padding:0 10px; background: rgb(41,96,152); color: #aceeff; font-size: 14px; font-weight: normal; }
+	#output-cubic { display: inline-block; vertical-align: top; margin-top: 20px; margin-left: 20px; width: 158px; height: 20px; border: 2px solid rgba(255,255,255,0.5); border-radius: 5px; background: rgba(0,0,0,0.0); padding: 10px;  color: #fff; font-size: 14px; }
+		/* Tiny Scrollbar */
+	#output-keyframes { display: inline-block; vertical-align: top; margin-top: 20px; margin-left: 38px; width: 618px; border: 2px solid rgba(255,255,255,0.5); border-radius: 5px; background: rgba(0,0,0,0.0); padding: 10px;  }
+	#output-keyframes span { display: inline-block; width: 50px; height: 20px; color: #aceeff; font-size: 12px; }
+	#output-keyframes li { display: inline-block; width: 50px; height: 20px; color: #fff; font-size: 12px; background: rgba(0,0,0,0); text-align: center;border-right: 1px solid #0a325a; }
+	#output-keyframes .viewport { width: 618px; height: 48px; overflow: hidden; position: relative; }
+	#output-keyframes .overview { list-style: none; width: 1416px; padding: 0; margin: 0; position: absolute; left: 0; top: 0;  }
+	#output-keyframes .scrollbar{ position: relative; clear: both; }
+	#output-keyframes .track { width: 100%; height:5px; position: relative; }
+	#output-keyframes .thumb { background:#0a325a; height: 10px; border-radius: 5px; cursor: pointer; overflow: hidden; position: absolute; left: 0; top: 0; }
+	#output-keyframes .disable { display: none; }
+	.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+		/* Tiny Scrollbar */
+	#output-info { }
+	#timelist { width: 5220px; }
+	#timelist li { }
+	#frameList { width: 5220px; }
+	#frameList li {  }
+
+	/*effect box*/
+	#cssTransitionPanel { position: absolute; top: 290px; left: 480px; width: 480px; height: 190px; background: #fff; box-shadow: 5px 5px 10px #14589d; }
+	#cssTransitionPanel .info { position: absolute; top: 0px; left: 0px; padding: 0px 5px; background: #ddd; font-size: 12px; color: #9f9f9f; }
+
+	#motionDotBox { }
+	.linearMoveBox { position: absolute; width: 320px; height: 4px; top: 90px; left: 80px; background: #eee; }
+	.circularMoveBox { position: absolute; width: 120px; height: 120px; top: 35px; left: 180px; border:4px solid #eee; border-radius: 64px;
+		-webkit-transform: rotateZ(0deg);
+		-moz-transform: rotateZ(0deg);
+	}
+	#motionLinearDot { position: absolute; top: -8px; left: -10px; width: 20px; height: 20px; border-radius: 10px; background: #06f;	
+	 }
+	#motionCircularDot { display: none; position: absolute; top: -12px; left: 50px; width: 20px; height: 20px; border-radius: 10px; background: #06f; }
+	.transition { 
+		transition-duration: 1s; 
+		transition-timing-function: cubic-bezier(0.20 , 0.40 , 0.80 , 0.90); 
+		-webkit-transition-duration: 1s; 
+		-webkit-transition-timing-function: cubic-bezier(0.20 , 0.40 , 0.80 , 0.90); 
+		-moz-transition-duration: 1s; 
+		-moz-transition-timing-function: cubic-bezier(0.20 , 0.40 , 0.80 , 0.90); 
+		-ms-transition-duration: 1s; 
+		-ms-transition-timing-function: cubic-bezier(0.20 , 0.40 , 0.80 , 0.90); 
+	}
+
+	/*author */
+	#authorInfo { position: absolute; display: none; width: 100%; height: 400px; background: rgba(0,0,0,0.5); z-index: 999; }
+	#authorDialog { position: relative; margin: 100px auto; width: 600px; height: 300px; background: #fff; box-shadow: 0px 5px 15px #555; border-radius: 5px; padding: 20px; font-size: 12px; line-height: 14px; }
+	#authorInfo .buttonClose { position: absolute; right: 20px; width: 24px; height: 24px; background: url(images/tools/motionanalytic/btns.png) -24px -250px; cursor: pointer;}
+	#authorInfo h1 { font-size: 18px; margin-top: 20px; margin-bottom: 10px; }
+	#authorInfo h3 { font-size: 12px; font-style: italic; color: #999; font-weight: normal; }
+	#authorInfo p { margin: 10px 0; }
+
+	/*output saving */
+	#outputSaving { position: absolute; display: none; width: 100%; height: 400px; background: rgba(0,0,0,0.5); z-index: 999; }
+	#outputDialog { position: relative; margin: 100px auto; width: 600px; height: 300px; background: #fff; box-shadow: 0px 5px 15px #555; border-radius: 5px; padding: 20px; font-size: 12px; line-height: 14px; word-wrap:break-word; }
+	#outputDialog .buttonClose { position: absolute; right: 20px; width: 24px; height: 24px; background: url(images/tools/motionanalytic/btns.png) -24px -250px; cursor: pointer; }
+	#outputDialog h1 { font-size: 18px; margin-top: 20px; margin-bottom: 10px;  }
+	#outputDialog p { margin-top: 30px; }
+	</style>
+	<script>
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "//hm.baidu.com/hm.js?d84d162ea3122a700428736747a85ce0";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+	<script src="js/jquery-1.8.2.min.js"></script>
+	<script src="js/tinyscrollbar.min.js" type="text/javascript"></script>
+</head>
+<body>
+	<div id="authorInfo">
+		<div id="authorDialog">
+			<div class="buttonClose" onclick="hideAuthorInfo()"></div>
+			<h1>Motion Porter</h1>
+			<h3>Design & Developed by Fangye Xu</h3>
+			<p>-</p>
+			<p>This is a home-made design tool, used for getting the motion parameters. </p>
+			<p>The outputs is generated and written in two ways: Cubic-bezier for CSS3 moving and Progress-per-Frame for more generic motion.</p>
+			<p>Also, Motion Porter offers you 2 ways to check the motion effect: native CSS3 transition and Canvas Animation.</p>
+			<p>Still lots of work to do, but I'll keep improving it.</p>
+			<p>-</p>
+			<p>For any question, including bugs and usability problems, FEEL FREE to contact with me:</p>
+			<p>fangye1108@163.com</p>
+		</div>
+	</div>
+
+	<div id="outputSaving">
+		<div id="outputDialog">
+			<div class="buttonClose" onclick="hideOutputInfo()"></div>
+			<h1>Params-Output</h1>
+			<p id="outputKeyParams">00, 0.5075, 1.0275, 1.5625, 2.1125, 2.68, 3.265, 3.8675, 4.4875, 5.13, 5.7925, 6.475, 7.185, 7.92, 8.68, 9.4675, 10.2875, 11.14, 12.025, 12.95, 13.9125, 14.9175, 15.9675, 17.065, 18.2125, 19.415, 20.675, 21.9975, 23.38, 24.825, 26.34, 27.92, 29.565, 31.2675, 33.0275, 34.8325, 36.6775, 38.545, 40.4225, 42.3, 44.16, 45.9975, 47.8, 49.56, 51.2725, 52.9375, 54.55, 56.1075, 57.615, 59.0725, 60.48, 61.84, 63.155, 64.4275, 65.66, 66.8525, 68.01, 69.1325, 70.2225, 71.28, 72.3075, 73.31, 74.285, 75.2375, 76.1625, 77.0675, 77.95, 78.8125, 79.6575, 80.4825, 81.29, 82.08, 82.855, 83.6125, 84.3575, 85.0875, 85.805, 86.51, 87.2025, 87.88, 88.5475, 89.205, 89.85, 90.4875, 91.1125, 91.7275, 92.335, 92.9325, 93.5225, 94.1025, 94.675, 95.2375, 95.795, 96.345, 96.8875, 97.4225, 97.9525, 98.4725, 98.9875, 99.495, 100,</p>
+		</div>
+	</div>
+
+	<section id="dashboard">
+		<div class="logo"></div>
+		<div class="menuBox">
+			<div id="homeButton" onclick="backToHome()"></div>
+			<div id="authorInfoButton" onclick="showAuthorInfo()"></div>
+		</div>
+		<div id="motiontype">
+			<div class="info">Select motion type</div>
+			<div class="buttons">
+				<div class="btn_motiontype active" id="linear" onclick="setBallMoveType_1()"><div class="desc">Linear</div></div>
+				<div class="btn_motiontype" id="circular" onclick="setBallMoveType_2()"><div class="desc">Circular</div></div>
+			</div>
+		</div>
+		<div class="buttonPlay" id="on" onclick="setBallGo()"></div>
+		<div class="buttonPlay" id="cover"></div>
+		<div id="saveOutputs">
+			<div class="info">Save the outputs</div>
+			<div id="btn_saveOutput" onclick="showSaveOutputBox()">Save</div>
+		</div>
+		<script type="text/javascript">
+			var h= $(window).height();
+			$("#authorInfo").css('height',$(document).height());
+			$("#outputSaving").css('height',$(document).height());
+			$("#dashboard").css('height',h);
+			function backToHome() {
+				window.location.href="home.html"; 
+			}
+			function showAuthorInfo() {
+				$('#authorInfo').show();
+			}
+			function hideAuthorInfo() {
+				$('#authorInfo').hide();
+			}
+			function showSaveOutputBox() {
+				$('#outputSaving').show();
+			}
+			function hideOutputInfo() {
+				$('#outputSaving').hide();
+			}
+		</script>
+	</section>
+
+	<div id="container">
+		<div id="canvasPanel">
+			<div class="info" id="controlInfo">Control Panel</div>
+			<div class="info" id="canvasInfo">Canvas Motion</div>
+		</div>
+		<div id="cssTransitionPanel">
+			<div class="info">CSS3 Motion</div>
+			<div id="motionDotBox" class='linearMoveBox'>
+				<div id="motionLinearDot"></div>
+				<div id="motionCircularDot"></div>
+			</div>
+		</div>
+	</div>
+		
+	<div id="output">
+		<div id="output-cubic">
+			<h1>Cubic-bezier :</h1>
+			<div id="output-cubic-params">0.20 , 0.40 , 0.80 , 0.90</div>
+		</div>
+		<div id="output-keyframes">
+			<h1 >Progress per frame :</h1>
+			<div class="viewport">
+				<div class="overview">
+					<div id="output-info">Click the "check effect" button, output motion params here</div>
+					<ul id="timelist"><span>Frames</span></ul>
+					<ul id="frameList"><span>Progress</span></ul>
+				</div>
+			</div>
+			<div class="scrollbar">	
+				<div class="track">
+					<div class="thumb">
+						<div class="end"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+
+		var Timecount = 0;
+		var BallMoveType = 1; // 1:linear  2:circular  3:scale
+		var param_1_x,param_1_y, param_2_x,param_2_y;
+
+		// button tryit
+		var cover_tryit = document.getElementById('cover');
+
+		// cubic bezier params
+		var Cparam = document.getElementById('output-cubic-params');
+		var cssMotionDirection = 1;
+
+
+		var Material = function () {
+			// UI state
+			this.state = 1;
+
+			// IMPORT PICS
+			this.ControlPanelBg = new Image();
+			this.ControlPanelBg.src	= 'images/tools/motionanalytic/panel_bg.png';
+
+			// CONTROL PART
+			// frame
+			this.MARGIN_CONTROL_X = 40;
+			this.MARGIN_CONTROL_Y = 480;
+			// control dot
+			this.Origin_x = 0; //
+			this.Origin_y = 0;
+			this.Origin_radius = 7;
+			this.DotA_x = 200; //
+			this.DotA_y = -100;
+			this.DotA_radius = 7;
+			this.isDotA_Dragging = false;
+			this.DotB_x = 100; //
+			this.DotB_y = -250;
+			this.DotB_radius = 7;
+			this.isDotB_Dragging = false;
+			this.Final_x = +400; //
+			this.Final_y = -400;
+			this.Final_radius = 7;
+			// motion dot
+			this.Slide_x = 0;
+			this.Slide_y = 0;
+			this.Slide_radius = 7;
+			this.isSlide_Dragging = false;
+			this.Motion_x = 0;
+			this.Motion_y = 0;
+			this.Motion_radius = 7;
+
+			// SHOW PROCESSING
+			this.ShowDuration = 100;
+			this.count_show = this.ShowDuration+1;
+			this.MotionCurve = [];
+			this.canvasMotionDirection = 1;
+
+			// SHOW BALL 
+			// canvas translate before drawing the ball
+			this.Ball_Translate_X = 560;
+			this.Ball_Translate_Y = 180;
+			// ball property
+			this.Ball_x = 0;
+			this.Ball_y = 0;
+			this.Ball_originX = 0;
+			this.Ball_originY = 0;
+			this.Ball_destX = 320;
+			this.Ball_destY = 0;
+			this.Ball_radius = 20;
+			this.Ball_offsetX = 800;
+			this.Ball_offsetY = 400;
+			this.BallTrack_rotate = Math.PI; // used for circular track
+
+			// TRACK
+			this.trackStart_X = 0;
+			this.trackStart_Y = 0;
+			this.trackOver_X = 320;
+			this.trackOver_Y = 0;
+
+			// panel
+			this.panel = document.getElementById('canvasPanel');
+			this.panel_canvas = document.createElement('canvas');
+			this.ctx = this.panel_canvas.getContext('2d');			
+
+		};
+
+		Material.prototype = {
+			init:function () {
+				// panel
+				this.panel.appendChild( this.panel_canvas );
+				this.panel_canvas.width= 1010;
+				this.panel_canvas.height= 600;
+
+				// we need calculate Motion Curve at once entering the page, just once to init the curve
+				for( var i=0; i<=400; ++i ) {
+						var yi = this.calcY( i, 0.01 );
+						this.MotionCurve[i] = yi; 
+				}
+			},
+			run:function () {
+				this.update();
+				this.draw();
+			},
+			update:function () {
+				// time controller
+				++Timecount;
+				//
+
+				// calculate Motion Curve when dragging any dot
+				if( this.isDotA_Dragging || this.isDotB_Dragging ) {
+					for( var i=0; i<=400; ++i ) {
+						var yi = this.calcY( i, 0.01 );
+						this.MotionCurve[i] = yi; 
+					}
+				}
+
+				// start show
+				if( this.count_show <= this.ShowDuration ) { 
+					// first disable the tryit button
+					cover_tryit.style.display = "block";
+
+					// update ball motion 
+					if( BallMoveType==1 ) {
+						if( this.canvasMotionDirection>0 ) {
+							this.Ball_x = -( this.MotionCurve[ this.count_show*4 ]/400 )*(this.Ball_destX-this.Ball_originX);
+						}else{
+							this.Ball_x = this.Ball_destX -  (-( this.MotionCurve[ this.count_show*4 ]/400 )*(this.Ball_destX-this.Ball_originX));
+						}
+					}else if( BallMoveType==2 ) {
+						this.BallTrack_rotate = -( this.MotionCurve[ this.count_show*4 ]/400 )*2*Math.PI + Math.PI;
+						if( this.count_show == this.ShowDuration ) {
+							this.BallTrack_rotate = Math.PI;
+						}
+					}
+					// update assist motion ball
+					this.Slide_x= this.count_show*4;
+					this.Motion_x= this.count_show*4;
+					this.Motion_y= this.MotionCurve[ this.count_show*4 ];
+
+					// update 
+					if( this.count_show== this.ShowDuration ){
+						this.canvasMotionDirection = this.canvasMotionDirection*(-1);
+					}
+					++this.count_show;
+				}else{
+					cover_tryit.style.display = "none";
+				}
+				// update cubic param
+				// dotA
+				param_1_x= Math.floor( 100*( this.DotA_x )/400 )/100;
+				param_1_y= Math.floor( 100*( -this.DotA_y )/400 )/100;
+				// dotB
+				param_2_x= Math.floor( 100*( this.DotB_x )/400 )/100;
+				param_2_y= Math.floor( 100*( -this.DotB_y )/400 )/100;
+				if( this.isDotA_Dragging || this.isDotB_Dragging ) {
+					Cparam.innerHTML =param_1_x.toFixed(2) +' , '+ param_1_y.toFixed(2) + ' , ' + param_2_x.toFixed(2) +' , '+ param_2_y.toFixed(2);
+				}
+			},
+			draw: function () {
+				// clear
+				this.ctx.clearRect(0,0,this.panel_canvas.width,this.panel_canvas.height);
+				// control
+				// if( Timecount==1 )
+				this.drawControlPanel();
+				// show
+				this.drawShowPanel();
+				this.drawMotionTrack();
+				this.drawBallShow();
+			},
+			drawControlPanel: function () {
+				// DRAW FRAME
+				this.ctx.save();
+				this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				this.ctx.beginPath();
+				this.ctx.moveTo(0,0);
+				this.ctx.lineTo(0,-400);
+				this.ctx.moveTo(0,0);
+				this.ctx.lineTo(400,0);
+				this.ctx.lineWidth =3.0;
+				this.ctx.strokeStyle = "#185798";
+				this.ctx.stroke();
+				this.ctx.restore();
+
+				// DRAW BG
+				this.ctx.save();
+				this.ctx.drawImage( this.ControlPanelBg, 0+this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y-400 );
+				this.ctx.restore();
+
+				// DRAW CURVE
+
+				// for( var i=0; i<=400; ++i ) {
+				// 	var x1,y1,x2,y2;
+				// 	var j= i+1;
+				// 	if( this.isDotA_Dragging || this.isDotB_Dragging ) {
+				// 		y1 = this.Origin_y*(400-i)*(400-i)*(400-i)/64000000 + 
+				// 				3*this.DotA_y*i*(400-i)*(400-i)/64000000 +
+				// 				3*this.DotB_y*i*i*(400-i)/64000000 +
+				// 				this.Final_y*i*i*i/64000000;
+				// 		x1 = this.Origin_x*(400-i)*(400-i)*(400-i)/64000000 + 
+				// 				3*this.DotA_x*i*(400-i)*(400-i)/64000000 +
+				// 				3*this.DotB_x*i*i*(400-i)/64000000 +
+				// 				this.Final_x*i*i*i/64000000;
+				// 		y2 = this.Origin_y*(400-j)*(400-j)*(400-j)/64000000 + 
+				// 				3*this.DotA_y*j*(400-j)*(400-j)/64000000 +
+				// 				3*this.DotB_y*j*j*(400-j)/64000000 +
+				// 				this.Final_y*j*j*j/64000000;
+				// 		x2 = this.Origin_x*(400-j)*(400-j)*(400-j)/64000000 + 
+				// 				3*this.DotA_x*j*(400-j)*(400-j)/64000000 +
+				// 				3*this.DotB_x*j*j*(400-j)/64000000 +
+				// 				this.Final_x*j*j*j/64000000;	
+				// 	}
+
+				// 	var yi = this.calcY( i, 0.01 );
+				// 	this.MotionCurve[i] = yi; // key
+				// 	// console.log( i ,yi);
+
+				// 	// 原始算法：贝塞尔绘制曲线
+				// 	this.ctx.save();
+				// 	this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				// 	this.ctx.beginPath();
+				// 	this.ctx.moveTo( x1, y1);
+				// 	this.ctx.lineTo( x2, y2);
+				// 	this.ctx.lineWidth = 4.0;
+				// 	this.ctx.strokeStyle = "#fc3";
+				// 	this.ctx.stroke();
+				// 	this.ctx.restore();
+				// }
+
+				// DRAW ASSIST CURVE
+				for( var i=0; i<=400; ++i ) {
+					this.ctx.save();
+					this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+					this.ctx.beginPath();
+					this.ctx.moveTo( i, this.MotionCurve[i] );	
+					this.ctx.lineTo( i, this.MotionCurve[i+1] );
+					this.ctx.lineWidth = 4.0;
+					this.ctx.strokeStyle = "#fc3";
+					this.ctx.stroke();
+					this.ctx.restore();
+				}
+
+				// DRAW LINES
+				this.ctx.save();
+				this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				this.ctx.beginPath();
+				this.ctx.lineWidth = 3.0;
+				this.ctx.moveTo( this.Origin_x, this.Origin_y );
+				this.ctx.lineTo( this.DotA_x, this.DotA_y );
+				this.ctx.moveTo( this.DotB_x, this.DotB_y );
+				this.ctx.lineTo( this.Final_x, this.Final_y );
+				this.ctx.strokeStyle = "#3cc";
+				this.ctx.stroke();
+				this.ctx.closePath();
+				this.ctx.restore();				
+
+				// DRAW DOTS
+				// dot - origin
+				// this.ctx.save();
+				// this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				// this.ctx.beginPath();
+				// this.ctx.arc( this.Origin_x, this.Origin_y, 7, 0, 2*Math.PI );
+				// this.ctx.fillStyle = "#999";
+				// this.ctx.fill();
+				// this.ctx.restore();
+				// dot - A
+				this.ctx.save();
+				this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				this.ctx.beginPath();
+				this.ctx.arc( this.DotA_x, this.DotA_y, this.DotA_radius, 0, 2*Math.PI );
+				this.ctx.strokeStyle= "#ff7800";
+				this.ctx.lineWidth= 6.0;
+				this.ctx.stroke();
+				this.ctx.fillStyle = "#ff7800";
+				this.ctx.fill();
+				this.ctx.restore();
+				// dot - B
+				this.ctx.save();
+				this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );			
+				this.ctx.beginPath();
+				this.ctx.arc( this.DotB_x, this.DotB_y, this.DotB_radius, 0, 2*Math.PI );
+				this.ctx.strokeStyle= "#ff7800";
+				this.ctx.lineWidth= 6.0;
+				this.ctx.stroke();
+				this.ctx.fillStyle = "#ff7800";
+				this.ctx.fill();
+				this.ctx.restore();	
+
+				// dot - final
+				// this.ctx.save();
+				// this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				// this.ctx.beginPath();
+				// this.ctx.arc( this.Final_x, this.Final_y, 7, 0, 2*Math.PI );
+				// this.ctx.fillStyle = "#999";
+				// this.ctx.fill();
+				// this.ctx.restore();
+
+				// 20141107 DRAW SLIDE-MOTION DOTS
+				// this.ctx.save();
+				// this.ctx.translate( this.MARGIN_CONTROL_X, this.MARGIN_CONTROL_Y );
+				// this.ctx.beginPath();
+					// slide
+				// this.ctx.arc( this.Slide_x, this.Slide_y, this.Slide_radius, 0, 2*Math.PI );
+					// motion
+				// this.Motion_x = this.Slide_x;
+				// this.Motion_y = this.calcY( this.Slide_x, .1 );
+				// this.ctx.arc( this.Motion_x, this.Motion_y, this.Motion_radius, 0, 2*Math.PI );
+				// this.ctx.fillStyle = "#0f0";
+				// this.ctx.fill();
+				this.ctx.restore();
+			},
+			// 20141107 --POWERED BY JEFFOR
+			calcY: function (x,delta) {
+				var low = 0;
+				var high = 400;
+				var mid = ( high +low )/2;
+
+				while( (high-low)>delta ) {
+					var cur_x = this.Origin_x*(400-mid)*(400-mid)*(400-mid)/64000000 + 
+								3*this.DotA_x*mid*(400-mid)*(400-mid)/64000000 +
+								3*this.DotB_x*mid*mid*(400-mid)/64000000 +
+								this.Final_x*mid*mid*mid/64000000;
+					if( cur_x>x ) high=mid;
+					else if( cur_x<x ) low=mid;
+					else break;
+					mid = ( low+high )/2;
+				}
+				return this.Origin_y*(400-mid)*(400-mid)*(400-mid)/64000000 + 
+							3*this.DotA_y*mid*(400-mid)*(400-mid)/64000000 +
+							3*this.DotB_y*mid*mid*(400-mid)/64000000 +
+							this.Final_y*mid*mid*mid/64000000;
+			},
+			drawShowPanel: function () {
+				this.ctx.save();
+				this.ctx.fillStyle = '#fff';
+				this.ctx.shadowOffsetX= 5;
+				this.ctx.shadowOffsetY= 5;
+				this.ctx.shadowColor= '#14589d';
+				this.ctx.shadowBlur= 10.0;
+				this.ctx.fillRect( 480,80,480,190 );
+				this.ctx.restore();
+			},
+			drawMotionTrack: function () {
+				if( BallMoveType == 1 ) {
+					this.ctx.save();
+					this.ctx.translate( this.Ball_Translate_X, this.Ball_Translate_Y );
+					this.ctx.beginPath();
+					this.ctx.moveTo( this.trackStart_X,this.trackStart_Y );
+					this.ctx.lineTo( this.trackOver_X,this.trackStart_Y );
+					this.ctx.lineWidth = 4.0;
+					this.ctx.strokeStyle = "#f0f0f0";
+					this.ctx.stroke();
+					this.ctx.restore();
+				}else if( BallMoveType == 2 ) {
+					this.ctx.save();
+					this.ctx.translate( this.Ball_Translate_X, this.Ball_Translate_Y );
+					this.ctx.beginPath();
+					this.ctx.arc( 0,0,60,2*Math.PI,0,false );
+					this.ctx.lineWidth = 4.0;
+					this.ctx.strokeStyle = "#f0f0f0";
+					this.ctx.stroke();
+					this.ctx.restore();
+				} 
+			},	
+			drawBallShow: function () {
+				if( BallMoveType==1 ) {
+					this.ctx.save();
+					this.ctx.translate( this.Ball_Translate_X, this.Ball_Translate_Y );
+					this.ctx.beginPath();
+					this.ctx.arc( this.Ball_x, this.Ball_y, 10, 2*Math.PI, 0 );
+					this.ctx.fillStyle= "#f00";
+					this.ctx.fill();
+					this.ctx.restore();
+				}else if( BallMoveType==2 ) {
+					this.ctx.save();
+					this.ctx.translate( this.Ball_Translate_X, this.Ball_Translate_Y );
+					this.ctx.rotate( this.BallTrack_rotate );
+					this.ctx.translate( 0,60 );
+					this.ctx.beginPath();
+					this.ctx.arc( this.Ball_x, this.Ball_y, 10, 2*Math.PI, 0 );
+					this.ctx.fillStyle= "#f00";
+					this.ctx.fill();
+					this.ctx.restore();
+				}
+			},
+
+
+
+
+			checkMouseDown:function () {
+				// DOT A
+				if( Math.sqrt((mouseX-this.DotA_x-this.MARGIN_CONTROL_X)*(mouseX-this.DotA_x-this.MARGIN_CONTROL_X)+(mouseY-this.DotA_y-this.MARGIN_CONTROL_Y)*(mouseY-this.DotA_y-this.MARGIN_CONTROL_Y)) < 15 ) {
+					this.isDotA_Dragging = true;
+				}
+				// DOT B
+				if( Math.sqrt((mouseX-this.DotB_x-this.MARGIN_CONTROL_X)*(mouseX-this.DotB_x-this.MARGIN_CONTROL_X)+(mouseY-this.DotB_y-this.MARGIN_CONTROL_Y)*(mouseY-this.DotB_y-this.MARGIN_CONTROL_Y)) < 15 ) {
+					this.isDotB_Dragging = true;
+				}
+				// DOT SLIDE
+				if( Math.sqrt((mouseX-this.Slide_x)*(mouseX-this.Slide_x)+(mouseY-this.Slide_y)*(mouseY-this.Slide_y)) < 10 ) {
+					this.isSlide_Dragging = true;
+				}
+			},
+			checkMouseMove:function () {
+				// DOT A
+				if( this.isDotA_Dragging ) {
+					if( mouseX>430 ) {
+						this.DotA_x= 400; 
+					}else if( mouseX<30 ) {
+						this.DotA_x= 0;
+					}else{
+						this.DotA_x = mouseX-this.MARGIN_CONTROL_X;
+					}
+					this.DotA_y = mouseY-this.MARGIN_CONTROL_Y;
+				}
+				if( Math.sqrt((mouseX-this.DotA_x-this.MARGIN_CONTROL_X)*(mouseX-this.DotA_x-this.MARGIN_CONTROL_X)+(mouseY-this.DotA_y-this.MARGIN_CONTROL_Y)*(mouseY-this.DotA_y-this.MARGIN_CONTROL_Y)) < 15 ) {
+					this.DotA_radius = 10;
+					document.getElementById('canvasPanel').style.cursor='pointer';
+				}else{
+					this.DotA_radius = 7;
+					document.getElementById('canvasPanel').style.cursor='default';
+				}
+				// DOT B
+				if( this.isDotB_Dragging ) {
+					if( mouseX>430 ) {
+						this.DotB_x= 400; 
+					}else if( mouseX<30 ) {
+						this.DotB_x= 0;
+					}else{
+						this.DotB_x = mouseX-this.MARGIN_CONTROL_X;
+					}
+					this.DotB_y = mouseY-this.MARGIN_CONTROL_Y;
+				}
+				if( Math.sqrt((mouseX-this.DotB_x-this.MARGIN_CONTROL_X)*(mouseX-this.DotB_x-this.MARGIN_CONTROL_X)+(mouseY-this.DotB_y-this.MARGIN_CONTROL_Y)*(mouseY-this.DotB_y-this.MARGIN_CONTROL_Y)) < 15 ) {
+					this.DotB_radius = 10;
+					document.getElementById('canvasPanel').style.cursor='pointer';
+				}else{
+					this.DotB_radius = 7;
+					document.getElementById('canvasPanel').style.cursor='default';
+				}
+				// SLIDE
+				if( this.isSlide_Dragging ) {
+					this.Slide_x = mouseX;
+				}
+			},
+			mouseUp:function () {
+				this.isDotA_Dragging = false;
+				this.isDotB_Dragging = false;
+				this.isSlide_Dragging = false;
+				// if( this.clickButton() == 'showbutton' ) {
+				// 	this.count_show = 0;
+				// }	
+			},
+			ballMove: function () {
+				if( BallMoveType ==1 ) {					
+					this.count_show = 0;
+				}else if( BallMoveType ==2 ) {
+					this.count_show = 0;
+				}
+			}
+		};
+	
+
+		var m = new Material();
+		m.init();
+
+		// mouse event
+		// mouse move
+		m.panel_canvas.addEventListener("mousemove",onMouseMove,false);
+		function onMouseMove(e) {
+			// mouseX= e.clientX - ( document.documentElement.clientWidth/2 - 600 ) ;
+			mouseX= e.clientX-200;
+			mouseY= e.clientY;
+			m.checkMouseMove();
+		}
+		// mouse down
+		m.panel_canvas.addEventListener("mousedown",onMouseDown,false);
+		function onMouseDown(e) {
+			m.checkMouseDown();
+		}
+		// mouse up
+		m.panel_canvas.addEventListener("mouseup", onMouseUp, false);
+		function onMouseUp(e) {
+			m.mouseUp();
+		}
+
+		// run
+		setInterval( run, 10 );
+		function run() {
+			m.run();
+		}
+		function setBallGo(e) {
+			// canvas move
+			m.ballMove();
+			// css move
+			var cubicBezierString= param_1_x.toFixed(2) +' , '+ param_1_y.toFixed(2) + ' , ' + param_2_x.toFixed(2) +' , '+ param_2_y.toFixed(2);
+			if( BallMoveType==1 ) {
+				$('#motionLinearDot').addClass('transition');
+				motionLinearDot.style.transitionTimingFunction = 'cubic-bezier(' + cubicBezierString +')';
+				if( cssMotionDirection>0 ) {
+					motionLinearDot.style.left = '310px';
+				}else{
+					motionLinearDot.style.left = '-10px';
+				}
+			}else if( BallMoveType==2 ) {
+				$('#motionDotBox').addClass('transition');
+				motionDotBox.style.transitionTimingFunction = 'cubic-bezier(' + cubicBezierString +')';
+				motionDotBox.style.webkitTransform = 'rotateZ(360deg)';
+			}
+			// output
+			outputKeyframes();
+		}
+		motionDotBox.addEventListener('webkitTransitionEnd', cssMotionReverse, false);
+		function cssMotionReverse () {
+			// reverse motion direction
+			cssMotionDirection = cssMotionDirection*(-1);
+
+			if( BallMoveType==1 ) {
+				// $('#motionLinearDot').removeClass('transition');
+				// motionLinearDot.style.left = '-10px';
+			}else if( BallMoveType==2 ){ 
+				$('#motionDotBox').removeClass('transition');
+				motionDotBox.style.webkitTransform = 'rotateZ(0deg)';
+			}
+		}
+
+		function outputKeyframes() {
+			// remove all the child
+			while( timelist.childNodes.length>1 ) {
+				timelist.removeChild(timelist.childNodes[timelist.childNodes.length-1]);
+				frameList.removeChild(frameList.childNodes[frameList.childNodes.length-1]);
+			}
+			// add child
+			var s_time=0;
+			var s_progress=0;
+			var s_progressText=0;
+			var s_progressSaving=0;
+			for(var i=0;i<=100;++i){
+				s_time = i ;
+				var node=document.createElement("LI");
+				var textnode=document.createTextNode(s_time);
+				node.appendChild(textnode);
+				document.getElementById("timelist").appendChild(node);
+			}
+			for(var i=0;i<m.MotionCurve.length;++i){
+				if( i%4==0 ) { 
+					s_progress = m.MotionCurve[i].toFixed(2)*(-100)/400;
+					s_progressText = s_progress.toFixed(2) + '%';
+					var node=document.createElement("LI");
+					var textnode=document.createTextNode(s_progressText);
+					node.appendChild(textnode);
+					document.getElementById("frameList").appendChild(node);
+					// for saving output
+					s_progressSaving += s_progress + ', ';
+					document.getElementById('outputKeyParams').innerHTML = s_progressSaving;
+				}
+			}
+			//
+			$('#output-keyframes').tinyscrollbar({ axis: 'x'});
+		}
+
+		function setBallMoveType_1() {
+			BallMoveType = 1;
+			m.Ball_Translate_X = 560;
+			m.Ball_x = 0;
+			// set style
+			$('#linear').addClass('active').siblings().removeClass('active');
+			$('#motionDotBox').attr('class','linearMoveBox');
+			$('#motionLinearDot').show().siblings().hide();
+		}
+		function setBallMoveType_2() {
+			BallMoveType = 2;
+			m.Ball_Translate_X = 720;
+			m.Ball_x = 0;
+			// set style
+			$('#circular').addClass('active').siblings().removeClass('active');
+			$('#motionDotBox').attr('class','circularMoveBox');
+			$('#motionCircularDot').show().siblings().hide();
+		}
+		function setBallMoveType_3() {
+			BallMoveType = 3;
+			$('#scale').addClass('active').siblings().removeClass('active');
+		}
+
+	</script>
+
+</body>
+</html> 
